@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chop City Hospital</title>
+<style>
+body{font-family:Arial, sans-serif;margin:0;background:#f5f7fb}
+header{background:#0057b7;color:white;padding:15px}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-weight:bold}
+.lang{margin-left:auto}
+.hero{background:linear-gradient(90deg,#0057b7,#ffd700);color:white;padding:60px 20px;text-align:center}
+.section{padding:40px 20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.card{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+button{background:#0057b7;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
+footer{background:#003f8a;color:white;padding:20px;text-align:center}
+input,select{width:100%;padding:10px;margin-top:8px;margin-bottom:15px}
+#loginBox,#adminLogin{max-width:400px;margin:auto}
+.hidden{display:none}
+.admin{background:#fff3cd;padding:20px;border-radius:10px}
+</style>
+</head>
+<body>
+
+<header>
+<h2 id="title">КНП "Чопська міська лікарня"</h2>
+<nav>
+<a href="#doctors">Лікарі</a>
+<a href="#departments">Відділення</a>
+<a href="#booking">Онлайн запис</a>
+<a href="#cabinet">Кабінет</a>
+<a href="#admin">Адмін</a>
+<a href="#contacts">Контакти</a>
+<div class="lang">
+<button onclick="setLang('uk')">UA</button>
+<button onclick="setLang('en')">EN</button>
+</div>
+</nav>
+</header>
+
+<section class="hero">
+<h1>Чопська міська лікарня</h1>
+<p>Онлайн запис до лікаря</p>
+<button onclick="scrollToBooking()">Записатися</button>
+<div style="margin-top:30px">
+<img src="hospital.jpg" alt="Чопська міська лікарня" style="width:100%;max-width:900px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.2)">
+</div>
+</section>
+
+<section class="section" id="departments">
+<h2>Відділення</h2>
+<div class="cards">
+<div class="card">
+<h3>Терапевтичне відділення</h3>
+</div>
+<div class="card">
+<h3>Поліклінічне відділення</h3>
+</div>
+</div>
+</section>
+
+<section class="section" id="doctors">
+<h2>Лікарі</h2>
+<div class="cards" id="doctorsList"></div>
+</section>
+
+<section class="section" id="booking">
+<h2>Онлайн запис</h2>
+<form onsubmit="submitForm(event)">
+<label>Лікар</label>
+<select id="doctorSelect"></select>
+
+<label>Дата</label>
+<input type="date" required>
+
+<label>Час</label>
+<input type="time" required>
+
+<label>Телефон</label>
+<input type="tel" required>
+
+<button type="submit">Підтвердити запис</button>
+</form>
+</section>
+
+<section class="section" id="cabinet">
+<h2>Особистий кабінет пацієнта</h2>
+
+<div id="loginBox">
+<input id="phone" placeholder="Телефон">
+<button onclick="login()">Увійти</button>
+</div>
+
+<div id="cabinetBox" class="hidden">
+<h3>Мої записи</h3>
+<ul id="appointments"></ul>
+<button onclick="logout()">Вийти</button>
+</div>
+</section>
+
+<section class="section admin" id="admin">
+<h2>Адмін панель</h2>
+
+<div id="adminLogin">
+<input id="adminUser" placeholder="Логін" />
+<input id="adminPass" type="password" placeholder="Пароль" />
+<button type="button" id="adminBtn">Увійти</button>
+</div>
+
+<div id="adminPanel" class="hidden">
+<h3>Додати лікаря</h3>
+<input id="docName" placeholder="ПІБ лікаря">
+<input id="docSpec" placeholder="Спеціальність">
+<button onclick="addDoctor()">Додати</button>
+
+<h3>Список лікарів</h3>
+<ul id="adminDoctors"></ul>
+</div>
+
+</section>
+
+<section class="section" id="callback">
+<h2>Зворотній дзвінок</h2>
+<form onsubmit="requestCallback(event)">
+<label>Ваше ім'я</label>
+<input id="cbName" required>
+
+<label>Телефон</label>
+<input id="cbPhone" required>
+
+<label>Зручний час дзвінка</label>
+<input id="cbTime" placeholder="Наприклад: 10:00 - 12:00">
+
+<button type="submit">Замовити дзвінок</button>
+</form>
+</section>
+
+<section class="section" id="contactForm">
+<h2>Написати нам</h2>
+<form onsubmit="sendMessage(event)">
+<label>Ваше ім'я</label>
+<input id="msgName" required>
+
+<label>Email або телефон</label>
+<input id="msgContact" required>
+
+<label>Повідомлення</label>
+<textarea id="msgText" style="width:100%;padding:10px;height:120px" required></textarea>
+
+<button type="submit">Надіслати</button>
+</form>
+</section>
+
+<section class="section" id="contacts">
+<h2>Контакти</h2>
+<p>Місто Чоп</p>
+<p>Телефон: 0504333900</p>
+<p>Email: knp.choplikarnja@ukr.net</p>
+<p>Додаткова пошта: info@chop-hospital.ua</p>
+<iframe src="https://maps.google.com/maps?q=Chop%20Ukraine&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="300"></iframe>
+</section>
+
+<footer>
+КНП "Чопська міська лікарня"
+</footer>
+
+<script>
+let adminUser="адміністратор"
+let adminPass="Світлана12345"
+
+function scrollToBooking(){
+ document.getElementById('booking').scrollIntoView()
+}
+
+function submitForm(e){
+ e.preventDefault()
+ let list=document.getElementById('appointments')
+ let li=document.createElement('li')
+ li.textContent='Запис до '+document.getElementById('doctorSelect').value
+ list.appendChild(li)
+ localStorage.setItem('appointments',list.innerHTML)
+ alert('Запис створено')
+}
+
+function login(){
+ let phone=document.getElementById('phone').value
+ if(phone.length<5) return alert('Введіть телефон')
+ localStorage.setItem('user',phone)
+ showCabinet()
+}
+
+function logout(){
+ localStorage.removeItem('user')
+ location.reload()
+}
+
+function showCabinet(){
+ document.getElementById('loginBox').classList.add('hidden')
+ document.getElementById('cabinetBox').classList.remove('hidden')
+ document.getElementById('appointments').innerHTML=
+ localStorage.getItem('appointments')||''
+}
+
+function adminLogin(){
+ let u=document.getElementById('adminUser').value.trim()
+ let p=document.getElementById('adminPass').value.trim()
+ if(u.toLowerCase()===adminUser.toLowerCase() && p===adminPass){
+  document.getElementById('adminLogin').classList.add('hidden')
+  document.getElementById('adminPanel').classList.remove('hidden')
+  loadDoctorsAdmin()
+ }else{
+  alert('Невірний логін або пароль')
+ }
+}
+
+function addDoctor(){
+ let name=document.getElementById('docName').value
+ let spec=document.getElementById('docSpec').value
+ if(!name) return
+
+ let doctors=JSON.parse(localStorage.getItem('doctors')||'[]')
+ doctors.push({name,spec})
+ localStorage.setItem('doctors',JSON.stringify(doctors))
+
+ loadDoctors()
+ loadDoctorsAdmin()
+}
+
+function loadDoctors(){
+ let doctors=JSON.parse(localStorage.getItem('doctors')||'[]')
+ let list=document.getElementById('doctorsList')
+ let select=document.getElementById('doctorSelect')
+ list.innerHTML=''
+ select.innerHTML=''
+ doctors.forEach(d=>{
+ list.innerHTML+=`<div class="card"><h3>${d.name}</h3><p>${d.spec}</p></div>`
+ select.innerHTML+=`<option>${d.name}</option>`
+ })
+}
+
+function loadDoctorsAdmin(){
+ let doctors=JSON.parse(localStorage.getItem('doctors')||'[]')
+ let list=document.getElementById('adminDoctors')
+ list.innerHTML=''
+ doctors.forEach(d=>{
+ list.innerHTML+=`<li>${d.name} - ${d.spec}</li>`
+ })
+}
+
+// attach admin button
+window.addEventListener('load',function(){
+ const btn=document.getElementById('adminBtn');
+ if(btn){ btn.onclick=adminLogin; }
+});
+
+if(localStorage.getItem('user')) showCabinet()
+loadDoctors()
+
+function requestCallback(e){
+ e.preventDefault()
+ let name=document.getElementById('cbName').value
+ let phone=document.getElementById('cbPhone').value
+ let time=document.getElementById('cbTime').value
+ 
+ let subject=encodeURIComponent('Зворотній дзвінок з сайту лікарні')
+ let body=encodeURIComponent('Імя: '+name+'\nТелефон: '+phone+'\nЧас: '+time)
+ 
+ window.location.href=`mailto:knp.choplikarnja@ukr.net?subject=${subject}&body=${body}`
+}
+
+function sendMessage(e){
+ e.preventDefault()
+ let name=document.getElementById('msgName').value
+ let contact=document.getElementById('msgContact').value
+ let text=document.getElementById('msgText').value
+ 
+ let subject=encodeURIComponent('Повідомлення з сайту лікарні')
+ let body=encodeURIComponent('Імя: '+name+'\nКонтакт: '+contact+'\n\n'+text)
+ 
+ window.location.href=`mailto:knp.choplikarnja@ukr.net?subject=${subject}&body=${body}`
+}
+</script>
+
+</body>
+</html>
