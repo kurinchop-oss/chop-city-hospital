@@ -44,9 +44,6 @@ input,select{width:100%;padding:10px;margin-top:8px;margin-bottom:15px}
 <h1>Чопська міська лікарня</h1>
 <p>Онлайн запис до лікаря</p>
 <button onclick="scrollToBooking()">Записатися</button>
-<div style="margin-top:30px">
-<img src="hospital.jpg" alt="Чопська міська лікарня" style="width:100%;max-width:900px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.2)">
-</div>
 </section>
 
 <section class="section" id="departments">
@@ -104,9 +101,9 @@ input,select{width:100%;padding:10px;margin-top:8px;margin-bottom:15px}
 <h2>Адмін панель</h2>
 
 <div id="adminLogin">
-<input id="adminUser" placeholder="Логін" />
-<input id="adminPass" type="password" placeholder="Пароль" />
-<button type="button" id="adminBtn">Увійти</button>
+<input id="adminUser" placeholder="Логін">
+<input id="adminPass" type="password" placeholder="Пароль">
+<button onclick="adminLogin()">Увійти</button>
 </div>
 
 <div id="adminPanel" class="hidden">
@@ -204,14 +201,14 @@ function showCabinet(){
 }
 
 function adminLogin(){
- let u=document.getElementById('adminUser').value.trim()
- let p=document.getElementById('adminPass').value.trim()
- if(u.toLowerCase()===adminUser.toLowerCase() && p===adminPass){
-  document.getElementById('adminLogin').classList.add('hidden')
-  document.getElementById('adminPanel').classList.remove('hidden')
-  loadDoctorsAdmin()
+ let u=document.getElementById('adminUser').value
+ let p=document.getElementById('adminPass').value
+ if(u===adminUser && p===adminPass){
+ document.getElementById('adminLogin').classList.add('hidden')
+ document.getElementById('adminPanel').classList.remove('hidden')
+ loadDoctorsAdmin()
  }else{
-  alert('Невірний логін або пароль')
+ alert('Невірний логін або пароль')
  }
 }
 
@@ -248,12 +245,6 @@ function loadDoctorsAdmin(){
  list.innerHTML+=`<li>${d.name} - ${d.spec}</li>`
  })
 }
-
-// attach admin button
-window.addEventListener('load',function(){
- const btn=document.getElementById('adminBtn');
- if(btn){ btn.onclick=adminLogin; }
-});
 
 if(localStorage.getItem('user')) showCabinet()
 loadDoctors()
